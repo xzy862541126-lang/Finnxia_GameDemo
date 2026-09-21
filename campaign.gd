@@ -372,6 +372,7 @@ func show_audio_settings() -> void:
 	_button(card, "音量 +", Rect2(320, 250, 130, 52), func() -> void: _change_volume(3.0))
 	_button(card, "音量 −", Rect2(468, 250, 130, 52), func() -> void: _change_volume(-3.0))
 	_button(card, "试听", Rect2(40, 310, 268, 50), func() -> void: _play_sfx(&"ui_confirm", 0.0))
+	_button(card, "关闭", Rect2(330, 310, 268, 50), close_modal)
 
 func _change_volume(delta: float) -> void:
 	var audio: Node = _audio()
@@ -379,7 +380,6 @@ func _change_volume(delta: float) -> void:
 		return
 	audio.call("set_volume_db", float(audio.get("volume_db")) + delta)
 	show_audio_settings()
-	_button(card, "关闭", Rect2(330, 310, 268, 50), close_modal)
 
 func show_garden_select() -> void:
 	if is_instance_valid(level):
