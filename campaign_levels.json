@@ -1,0 +1,713 @@
+[
+  {
+    "title": "林间货棚",
+    "subtitle": "先试一只箱子：向下推两格即可归位",
+    "difficulty": "入门",
+    "theme": 1,
+    "rows": [
+      "#########",
+      "#       #",
+      "#   #   #",
+      "#       #",
+      "#       #",
+      "#       #",
+      "#########"
+    ],
+    "player": [
+      3,
+      2
+    ],
+    "boxes": [
+      [
+        3,
+        3
+      ]
+    ],
+    "goals": [
+      [
+        3,
+        5
+      ]
+    ],
+    "solution": "DD",
+    "solution_pushes": 2,
+    "art_index": 1,
+    "legacy_index": 1,
+    "difficulty_metrics": {
+      "solution_steps": 2,
+      "solution_pushes": 2,
+      "box_switches": 0,
+      "status": "solved",
+      "minimum_pushes": 2,
+      "manhattan_lower_bound": 2,
+      "forced_extra_pushes": 0,
+      "expanded_states": 3,
+      "static_dead_squares": 15,
+      "pruned_dead_pushes": 0,
+      "narrow_cells": 5
+    }
+  },
+  {
+    "title": "双拱花廊",
+    "subtitle": "两只箱子，学会绕到背后再推",
+    "difficulty": "初级",
+    "theme": 2,
+    "rows": [
+      "#########",
+      "#       #",
+      "#       #",
+      "#  # #  #",
+      "#       #",
+      "#       #",
+      "#       #",
+      "#########"
+    ],
+    "player": [
+      2,
+      2
+    ],
+    "boxes": [
+      [
+        2,
+        3
+      ],
+      [
+        4,
+        4
+      ]
+    ],
+    "goals": [
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ]
+    ],
+    "solution": "DDDUUURRDDD",
+    "solution_pushes": 5,
+    "art_index": 2,
+    "legacy_index": 2,
+    "difficulty_metrics": {
+      "solution_steps": 11,
+      "solution_pushes": 5,
+      "box_switches": 1,
+      "status": "solved",
+      "minimum_pushes": 5,
+      "manhattan_lower_bound": 5,
+      "forced_extra_pushes": 0,
+      "expanded_states": 6,
+      "static_dead_squares": 17,
+      "pruned_dead_pushes": 4,
+      "narrow_cells": 5
+    }
+  },
+  {
+    "title": "月光石桥",
+    "subtitle": "学习转向，别把箱子推到墙边",
+    "difficulty": "练习",
+    "theme": 3,
+    "rows": [
+      "##########",
+      "#        #",
+      "#        #",
+      "#  #  #  #",
+      "#     #  #",
+      "#        #",
+      "#        #",
+      "##########"
+    ],
+    "player": [
+      3,
+      2
+    ],
+    "boxes": [
+      [
+        4,
+        2
+      ],
+      [
+        5,
+        5
+      ]
+    ],
+    "goals": [
+      [
+        3,
+        6
+      ],
+      [
+        4,
+        6
+      ]
+    ],
+    "solution": "URDDDDUUURRRDDDDLLLUURDRDL",
+    "solution_pushes": 7,
+    "art_index": 3,
+    "legacy_index": 3,
+    "difficulty_metrics": {
+      "solution_steps": 26,
+      "solution_pushes": 7,
+      "box_switches": 1,
+      "status": "solved",
+      "minimum_pushes": 7,
+      "manhattan_lower_bound": 7,
+      "forced_extra_pushes": 0,
+      "expanded_states": 8,
+      "static_dead_squares": 18,
+      "pruned_dead_pushes": 1,
+      "narrow_cells": 4
+    }
+  },
+  {
+    "title": "四叶工坊",
+    "subtitle": "计划推动顺序，先让出通道；推错可用 Z 撤销",
+    "difficulty": "挑战",
+    "theme": 0,
+    "rows": [
+      "###########",
+      "#     #   #",
+      "#    #    #",
+      "#  #   # ##",
+      "#  #      #",
+      "# #  ##   #",
+      "#         #",
+      "###########"
+    ],
+    "player": [
+      2,
+      2
+    ],
+    "boxes": [
+      [
+        2,
+        3
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        4
+      ]
+    ],
+    "goals": [
+      [
+        2,
+        6
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        5,
+        6
+      ]
+    ],
+    "solution": "LDDRULURRURDDDRRRDRDLLLLLRRRRUULLLDURRRDDLLLUUURRURURDLLDDRDRRULLLLULDDUURRURRDDDRDLLL",
+    "solution_pushes": 27,
+    "added_obstacles": [
+      [
+        9,
+        3
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        6,
+        5
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        5,
+        5
+      ]
+    ],
+    "art_index": 4,
+    "legacy_index": 4,
+    "difficulty_metrics": {
+      "solution_steps": 86,
+      "solution_pushes": 27,
+      "box_switches": 5,
+      "status": "solved",
+      "minimum_pushes": 27,
+      "manhattan_lower_bound": 21,
+      "forced_extra_pushes": 6,
+      "expanded_states": 138,
+      "static_dead_squares": 20,
+      "pruned_dead_pushes": 100,
+      "narrow_cells": 16
+    }
+  },
+  {
+    "title": "铜钟货栈",
+    "subtitle": "计划推动顺序，先让出通道；推错可用 Z 撤销",
+    "difficulty": "挑战+",
+    "theme": 2,
+    "rows": [
+      "############",
+      "###   #    #",
+      "#  #  #    #",
+      "#  #    #  #",
+      "# #        #",
+      "#    #  # ##",
+      "#    #   # #",
+      "#      #   #",
+      "############"
+    ],
+    "player": [
+      9,
+      1
+    ],
+    "boxes": [
+      [
+        2,
+        5
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        9,
+        2
+      ]
+    ],
+    "goals": [
+      [
+        2,
+        7
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        5,
+        7
+      ]
+    ],
+    "solution": "LLDDDLLLDDLLLURDRRUURRRULDLLUURDRDLULDDDUURRDDDLLLURUUURRRUURRDLULDDURRRDDLLLLLULDDDLDRUUULDDUURURRRURRDRDLLLLLULDDD",
+    "solution_pushes": 31,
+    "added_obstacles": [
+      [
+        3,
+        2
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        7,
+        7
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        10,
+        5
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        9,
+        6
+      ],
+      [
+        2,
+        4
+      ]
+    ],
+    "art_index": 6,
+    "legacy_index": 6,
+    "difficulty_metrics": {
+      "solution_steps": 116,
+      "solution_pushes": 31,
+      "box_switches": 5,
+      "status": "solved",
+      "minimum_pushes": 31,
+      "manhattan_lower_bound": 27,
+      "forced_extra_pushes": 4,
+      "expanded_states": 2864,
+      "static_dead_squares": 26,
+      "pruned_dead_pushes": 2912,
+      "narrow_cells": 20
+    }
+  },
+  {
+    "title": "萤火密林",
+    "subtitle": "计划推动顺序，先让出通道；推错可用 Z 撤销",
+    "difficulty": "困难",
+    "theme": 1,
+    "rows": [
+      "###########",
+      "#         #",
+      "#  #      #",
+      "## #   #  #",
+      "##        #",
+      "# ####    #",
+      "#        ##",
+      "#        ##",
+      "###########"
+    ],
+    "player": [
+      8,
+      4
+    ],
+    "boxes": [
+      [
+        3,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        8,
+        3
+      ]
+    ],
+    "goals": [
+      [
+        2,
+        7
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        5,
+        7
+      ]
+    ],
+    "solution": "LLLUUULLLDDDRRUUURRRRDDDRDLULDDRDLLLLLURRRUURRUUULLLDRDDDUULLDRUUURRRDDDDLLDURURUUULLDDDDRDDLLLRRRUULDRDLLURUURRUULULDDDDDRDL",
+    "solution_pushes": 33,
+    "added_obstacles": [
+      [
+        9,
+        7
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        9,
+        6
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        1,
+        4
+      ]
+    ],
+    "art_index": 5,
+    "legacy_index": 5,
+    "difficulty_metrics": {
+      "solution_steps": 125,
+      "solution_pushes": 33,
+      "box_switches": 9,
+      "status": "solved",
+      "minimum_pushes": 33,
+      "manhattan_lower_bound": 25,
+      "forced_extra_pushes": 8,
+      "expanded_states": 97,
+      "static_dead_squares": 21,
+      "pruned_dead_pushes": 56,
+      "narrow_cells": 11
+    }
+  },
+  {
+    "title": "霜叶迷庭",
+    "subtitle": "计划推动顺序，先让出通道；推错可用 Z 撤销",
+    "difficulty": "专家",
+    "theme": 3,
+    "rows": [
+      "############",
+      "#     ###  #",
+      "#   ##     #",
+      "# ##    #  #",
+      "#          #",
+      "#    #     #",
+      "#  #    # ##",
+      "#  #   #   #",
+      "#        # #",
+      "############"
+    ],
+    "player": [
+      6,
+      4
+    ],
+    "boxes": [
+      [
+        3,
+        5
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        9,
+        5
+      ]
+    ],
+    "goals": [
+      [
+        2,
+        8
+      ],
+      [
+        3,
+        8
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        5,
+        8
+      ],
+      [
+        6,
+        8
+      ]
+    ],
+    "solution": "DDLLULULDDDUUURRURLDDDRRUULULDDDDRDLUUUURRRUULDDDDDUUUUURRLDDRRURUULDDRDLLRUULLDDRDLULDDUURRRRDLDDLDLLLUURDUUURRRDDDLDLLRRURUULLULDDD",
+    "solution_pushes": 35,
+    "added_obstacles": [
+      [
+        2,
+        3
+      ],
+      [
+        9,
+        8
+      ],
+      [
+        10,
+        6
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        7,
+        7
+      ]
+    ],
+    "art_index": 7,
+    "legacy_index": 7,
+    "difficulty_metrics": {
+      "solution_steps": 133,
+      "solution_pushes": 35,
+      "box_switches": 8,
+      "status": "solved",
+      "minimum_pushes": 35,
+      "manhattan_lower_bound": 31,
+      "forced_extra_pushes": 4,
+      "expanded_states": 36,
+      "static_dead_squares": 28,
+      "pruned_dead_pushes": 54,
+      "narrow_cells": 20
+    }
+  },
+  {
+    "title": "星光大仓",
+    "subtitle": "计划推动顺序，先让出通道；推错可用 Z 撤销",
+    "difficulty": "大师",
+    "theme": 0,
+    "rows": [
+      "#############",
+      "#    #      #",
+      "#           #",
+      "# ## ##  #  #",
+      "#           #",
+      "## ##   ##  #",
+      "#           #",
+      "#     #     #",
+      "#           #",
+      "#############"
+    ],
+    "player": [
+      10,
+      5
+    ],
+    "boxes": [
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        6,
+        5
+      ],
+      [
+        10,
+        3
+      ],
+      [
+        10,
+        6
+      ]
+    ],
+    "goals": [
+      [
+        2,
+        8
+      ],
+      [
+        3,
+        8
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        5,
+        8
+      ],
+      [
+        6,
+        8
+      ]
+    ],
+    "solution": "ULLLLLLLLLUURRRDULLLDDRRRUURLDDRLUURRLLDDRRDRDLULDDURRDDLLLLUURRUULUURRURRDDLDURUULDRDDLDURUULDDRRRRDDDLLULLLULDDURRDDLLLUURUURRDDDRDLLLUUUURRUURRRDDRDDLLLRRRUULLLLDDDRDLLRUUUURRRDDDRDLLLL",
+    "solution_pushes": 49,
+    "added_obstacles": [
+      [
+        9,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        5,
+        1
+      ]
+    ],
+    "difficulty_metrics": {
+      "solution_steps": 188,
+      "solution_pushes": 49,
+      "box_switches": 15,
+      "status": "solved",
+      "minimum_pushes": 49,
+      "manhattan_lower_bound": 33,
+      "forced_extra_pushes": 16,
+      "expanded_states": 582,
+      "static_dead_squares": 23,
+      "pruned_dead_pushes": 718,
+      "narrow_cells": 15
+    },
+    "art_index": 8,
+    "legacy_index": 8
+  }
+]
