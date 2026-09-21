@@ -97,11 +97,11 @@ func _button(parent: Node, text: String, rect: Rect2, callback: Callable, disabl
 	button.size = rect.size
 	button.disabled = disabled
 	button.pressed.connect(func() -> void:
-		GameAudio.play(&"ui_click", 0.02)
+		_play_sfx(&"ui_click", 0.02)
 		callback.call_deferred())
 	button.mouse_entered.connect(func() -> void:
 		if not button.disabled:
-			GameAudio.play(&"ui_hover", 0.03))
+			_play_sfx(&"ui_hover", 0.03))
 	parent.add_child(button)
 	return button
 
@@ -218,7 +218,7 @@ func _garden_bookmark() -> void:
 	bookmark.button_up.connect(func() -> void:
 		bookmark.scale = Vector2(1.06, 1.06))
 	bookmark.pressed.connect(func() -> void:
-		GameAudio.play(&"ui_click", 0.02)
+		_play_sfx(&"ui_click", 0.02)
 		show_garden_select())
 	ui.add_child(bookmark)
 	# Pixel ribbon, wreath and drop shadow are painted on the bookmark itself.
@@ -343,21 +343,42 @@ func _draw_header() -> void:
 	_button(ui, "保存", Rect2(998, 12, 94, 42), manual_save)
 	_button(ui, "菜单 Esc", Rect2(1104, 12, 146, 42), show_pause)
 
+func _audio() -> Node:
+	return get_node_or_null("/root/GameAudio") as Node
+
+func _play_sfx(name: StringName, throttle: float = 0.0) -> void:
+	var audio: Node = _audio()
+	if audio != null and audio.has_method("play"):
+		audio.call("play", name, throttle)
+
+func _audio_state() -> Array:
+	var audio: Node = _audio()
+	if audio == null:
+		return [false, -9.0]
+	return [bool(audio.get("enabled")), float(audio.get("volume_db"))]
+
 func toggle_audio() -> void:
-	GameAudio.set_enabled(not GameAudio.enabled)
+	var audio: Node = _audio()
+	if audio == null:
+		return
+	audio.call("set_enabled", not bool(audio.get("enabled")))
 	show_audio_settings()
 
 func show_audio_settings() -> void:
-	var card: Panel = _dialog("花园的声音", "当前状态：%s    音量：%d dB" % ["开启" if GameAudio.enabled else "静音", int(GameAudio.volume_db)], "audio")
+	var state: Array = _audio_state()
+	var card: Panel = _dialog("花园的声音", "当前状态：%s    音量：%d dB" % ["开启" if state[0] else "静音", int(state[1])], "audio")
 	var note: Label = _label(card, "关闭后游戏仍会完整记录成绩。", Rect2(40, 205, 560, 26), 16, MUTED)
 	_button(card, "开启 / 静音", Rect2(40, 250, 260, 52), func() -> void: toggle_audio())
-	_button(card, "音量 +", Rect2(320, 250, 130, 52), func() -> void:
-		GameAudio.set_volume_db(GameAudio.volume_db + 3.0)
-		show_audio_settings())
-	_button(card, "音量 −", Rect2(468, 250, 130, 52), func() -> void:
-		GameAudio.set_volume_db(GameAudio.volume_db - 3.0)
-		show_audio_settings())
-	_button(card, "试听", Rect2(40, 310, 268, 50), func() -> void: GameAudio.play(&"ui_confirm", 0.0))
+	_button(card, "音量 +", Rect2(320, 250, 130, 52), func() -> void: _change_volume(3.0))
+	_button(card, "音量 −", Rect2(468, 250, 130, 52), func() -> void: _change_volume(-3.0))
+	_button(card, "试听", Rect2(40, 310, 268, 50), func() -> void: _play_sfx(&"ui_confirm", 0.0))
+
+func _change_volume(delta: float) -> void:
+	var audio: Node = _audio()
+	if audio == null:
+		return
+	audio.call("set_volume_db", float(audio.get("volume_db")) + delta)
+	show_audio_settings()
 	_button(card, "关闭", Rect2(330, 310, 268, 50), close_modal)
 
 func show_garden_select() -> void:
@@ -467,7 +488,7 @@ func _on_completed() -> void:
 		var rewards: Array[String] = ["主页奖励：花坛绽放", "主页奖励：星灯点亮", "主页奖励：萤火满园"]
 		description += "\n" + rewards[current_index]
 		menu_art.revival_stage = store.data["completed"].size()
-	GameAudio.play(&"win" if not final_level else &"finale")
+	_play_sfx(&"win" if not final_level else &"finale")
 	var card: Panel = _dialog("花园因你而改变" if garden_mode else "所有货物，妥善抵达", description, "win")
 	_button(card, "主菜单", Rect2(40, 280, 150, 54), func() -> void: show_menu())
 	_button(card, "再玩一次", Rect2(207, 280, 165, 54), func() -> void: load_level(current_index))
@@ -568,11 +589,11 @@ func _notification(what: int) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		if modal_kind in ["pause", "save_info", "confirm_new", "select_confirm", "exit", "audio"]:
-			GameAudio.play(&"ui_back", 0.02)
+			_play_sfx(&"ui_back", 0.02)
 			close_modal.call_deferred()
 		elif screen == "playing" and modal_kind.is_empty():
 			show_pause.call_deferred()
 		elif screen in ["select", "garden_select", "garden_ending"]:
-			GameAudio.play(&"ui_back", 0.02)
+			_play_sfx(&"ui_back", 0.02)
 			show_menu.call_deferred(false)
 		get_viewport().set_input_as_handled()

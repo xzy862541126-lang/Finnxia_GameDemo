@@ -174,11 +174,16 @@ func _physics_process(delta: float) -> void:
 		player.finish_step()
 		_sync_view()
 		if built:
-			GameAudio.play(&"bridge")
+			_play_sfx(&"bridge")
 		elif bloomed:
-			GameAudio.play(&"bloom")
+			_play_sfx(&"bloom")
 		elif delivered:
-			GameAudio.play(&"placement")
+			_play_sfx(&"placement")
+
+func _play_sfx(name: StringName, throttle: float = 0.0) -> void:
+	var audio: Node = get_node_or_null("/root/GameAudio")
+	if audio != null and audio.has_method("play"):
+		audio.call("play", name, throttle)
 
 func _release_box_exception() -> void:
 	if is_instance_valid(_moving_box):
@@ -241,7 +246,7 @@ func undo_move() -> void:
 	if suspended or busy:
 		return
 	if board.undo():
-		GameAudio.play(&"undo", 0.03)
+		_play_sfx(&"undo", 0.03)
 		player.clear_input()
 		player.finish_step()
 		_sync_view()

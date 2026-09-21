@@ -97,13 +97,18 @@ func begin_step(direction: Vector2i, pushing: bool) -> void:
 	sprite.texture = PUSH[facing] if pushing else WALK[facing]
 	sprite.hframes = 6
 	_step_sound_played = false
-	GameAudio.play(&"push" if pushing else &"walk", 0.02)
+	_play_sfx(&"push" if pushing else &"walk", 0.02)
 
 func sample_step(progress: float) -> void:
 	sprite.frame = clampi(int(progress * 6.0), 0, 5)
 	if not _step_sound_played and progress >= 0.5:
 		_step_sound_played = true
-		GameAudio.play(&"walk", 0.05)
+		_play_sfx(&"walk", 0.05)
+
+func _play_sfx(name: StringName, throttle: float = 0.0) -> void:
+	var audio: Node = get_node_or_null("/root/GameAudio")
+	if audio != null and audio.has_method("play"):
+		audio.call("play", name, throttle)
 
 func finish_step() -> void:
 	is_moving = false
