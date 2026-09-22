@@ -5,6 +5,9 @@ const LevelController = preload("res://level.gd")
 const SaveStore = preload("res://save_store.gd")
 const GardenArt = preload("res://garden_art.gd")
 const GardenChapter = preload("res://garden_chapter.gd")
+const Guide = preload("res://rt_guide.gd")
+@export var tutorials_enabled: bool = true
+var guide: Guide
 var garden_mode: bool = false
 var classic_store: SaveStore
 var garden_store: SaveStore = SaveStore.new()
@@ -47,6 +50,10 @@ func _ready() -> void:
 	ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ui.theme = _ui_theme
 	layer.add_child(ui)
+	guide = Guide.new()
+	add_child(guide)
+	guide.closed.connect(func() -> void:
+		if is_instance_valid(level): level.set_modal(false))
 	show_menu(false)
 
 func _make_theme() -> Theme:
@@ -155,6 +162,7 @@ func show_menu(persist: bool = true) -> void:
 	_button(ui, "本机存档", Rect2(309, 489, 215, 52), show_save_info)
 	_button(ui, "退出", Rect2(76, 557, 448, 48), request_exit)
 	_button(ui, "音效设置", Rect2(76, 656, 215, 44), show_audio_settings)
+	_button(ui, "实时探索 · 试玩", Rect2(309, 656, 215, 44), func() -> void: get_tree().change_scene_to_file("res://rt_level.tscn"))
 	_garden_bookmark()
 	var message: String = "%d / 9 份委托已完成" % (store.data.get("completed", {}) as Dictionary).size()
 	if not store.last_error.is_empty():
@@ -171,6 +179,7 @@ func show_menu(persist: bool = true) -> void:
 func _garden_bookmark() -> void:
 	var bookmark: Button = Button.new()
 	bookmark.text = ""
+	bookmark.tooltip_text = "花园修复篇"
 	bookmark.position = Vector2(588, 0)
 	bookmark.size = Vector2(68, 176)
 	bookmark.focus_mode = Control.FOCUS_NONE
@@ -198,7 +207,7 @@ func _garden_bookmark() -> void:
 	pressed.bg_color = Color("c19a2e")
 	bookmark.add_theme_stylebox_override("pressed", pressed)
 	bookmark.mouse_entered.connect(func() -> void:
-		GameAudio.play(&"ui_hover", 0.03)
+		_play_sfx(&"ui_hover", 0.03)
 		if hover_tween != null:
 			hover_tween.kill()
 		hover_tween = create_tween().set_parallel(true)
@@ -333,15 +342,60 @@ func load_level(index: int, resume: bool = false) -> void:
 		save_hint.text = "进度与关卡不匹配，已安全重开本关。"
 	if level.board.is_solved():
 		_on_completed.call_deferred()
+	elif tutorials_enabled:
+		show_tutorial()
+
+func show_tutorial(force: bool = false) -> void:
+	if not is_instance_valid(level) or not modal_kind.is_empty():
+		return
+	var topics: Array[String] = ["basics", "rules"]
+	if garden_mode:
+		if not entries[current_index]["flowers"].is_empty(): topics.append("flower")
+		if not entries[current_index]["water"].is_empty(): topics.append("bridge")
+	if guide.open(topics, force):
+		level.set_modal(true)
 
 func _draw_header() -> void:
 	var heading: Dictionary = entries[current_index]
-	_label(ui, "%02d / %02d  ·  %s" % [current_index + 1, entries.size(), heading["title"]], Rect2(28, 9, 620, 32), 25)
-	_label(ui, str(heading["subtitle"]), Rect2(28, 43, 660, 25), 16, MUTED)
-	save_hint = _label(ui, "每一步自动保存", Rect2(740, 17, 150, 26), 15, MUTED)
-	_button(ui, "音效", Rect2(900, 12, 84, 42), toggle_audio)
-	_button(ui, "保存", Rect2(998, 12, 94, 42), manual_save)
-	_button(ui, "菜单 Esc", Rect2(1104, 12, 146, 42), show_pause)
+	var header: HBoxContainer = HBoxContainer.new()
+	header.name = "LevelHeader"
+	header.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+	header.offset_left = 28
+	header.offset_right = -28
+	header.offset_top = 8
+	header.offset_bottom = 72
+	header.add_theme_constant_override("separation", 28)
+	header.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ui.add_child(header)
+	var info: VBoxContainer = VBoxContainer.new()
+	info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	info.add_theme_constant_override("separation", 3)
+	info.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header.add_child(info)
+	var title: Label = _label(info, "%02d / %02d  ·  %s" % [current_index + 1, entries.size(), heading["title"]], Rect2(), 25)
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	var subtitle: Label = _label(info, str(heading["subtitle"]), Rect2(), 16, MUTED)
+	subtitle.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	subtitle.tooltip_text = str(heading["subtitle"])
+	var actions: VBoxContainer = VBoxContainer.new()
+	actions.add_theme_constant_override("separation", 3)
+	actions.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header.add_child(actions)
+	var buttons: HBoxContainer = HBoxContainer.new()
+	buttons.name = "HeaderButtons"
+	buttons.alignment = BoxContainer.ALIGNMENT_END
+	buttons.add_theme_constant_override("separation", 10)
+	actions.add_child(buttons)
+	var callbacks: Array[Callable] = [func() -> void: show_tutorial(true), toggle_audio, manual_save, show_pause]
+	var names: Array[String] = ["图解", "音效", "保存", "菜单 Esc"]
+	for index: int in range(names.size()):
+		var button: Button = _button(buttons, names[index], Rect2(), callbacks[index])
+		button.custom_minimum_size = Vector2(112 if index == 3 else 80, 40)
+		button.add_theme_font_size_override("font_size", 18)
+		button.focus_mode = Control.FOCUS_NONE
+	save_hint = _label(actions, "每一步自动保存", Rect2(), 14, MUTED)
+	save_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	save_hint.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 
 func _audio() -> Node:
 	return get_node_or_null("/root/GameAudio") as Node
@@ -483,7 +537,9 @@ func _on_completed() -> void:
 	var final_level: bool = current_index == entries.size() - 1
 	store.data["finished"] = final_level and store.data["completed"].size() == entries.size()
 	_save_active()
-	var description: String = "%s 已完成！\n%d 步  ·  %d 次推动  ·  %d 个货箱归位" % [entries[current_index]["title"], level.board.steps, level.board.pushes, level.goals.size()]
+	var reference: int = str(entries[current_index]["solution"]).length()
+	var rank: String = Catalog.grade(level.board.steps, reference)
+	var description: String = "%s · %d 步 · %d 次推动\n评级 %s  |  参考 %d 步  |  最佳 %d 步" % [entries[current_index]["title"], level.board.steps, level.board.pushes, rank, reference, int(store.data["completed"][key]["steps"])]
 	if garden_mode:
 		var rewards: Array[String] = ["主页奖励：花坛绽放", "主页奖励：星灯点亮", "主页奖励：萤火满园"]
 		description += "\n" + rewards[current_index]
@@ -513,12 +569,8 @@ func show_ending() -> void:
 	_label(ui, "全部通关！", Rect2(65, 150, 590, 94), 65)
 	_label(ui, "九座庭院的灯，都为你亮起。", Rect2(76, 260, 540, 48), 27)
 	_label(ui, "谢谢你，把每一份委托送到终点。", Rect2(76, 317, 540, 34), 21, MUTED)
-	var total_steps: int = 0
-	var total_pushes: int = 0
-	for record: Dictionary in store.data["completed"].values():
-		total_steps += int(record["steps"])
-		total_pushes += int(record["pushes"])
-	_label(ui, "完成 9 / 9   ·   最佳纪录合计\n%d 步    %d 次推动" % [total_steps, total_pushes], Rect2(76, 390, 540, 82), 23)
+	var total: Dictionary = Catalog.aggregate(store.data["completed"], entries)
+	_label(ui, "总评级 %s  ·  九关最佳步数合计 %d\n参考解法合计 %d 步 · 隐藏探索单独统计" % [total["grade"], total["steps"], total["reference"]], Rect2(76, 390, 600, 82), 22)
 	_button(ui, "返回开局页面", Rect2(76, 515, 450, 58), func() -> void: show_menu(false))
 	_button(ui, "重新开启旅程", Rect2(76, 590, 450, 54), request_new_game)
 	var badge: Panel = _panel(ui, Rect2(784, 566, 354, 120))
@@ -550,7 +602,8 @@ func show_level_select() -> void:
 		var column: int = index % 3
 		var entry: Dictionary = entries[index]
 		var cleared: bool = (store.data.get("completed", {}) as Dictionary).has(str(index))
-		var title: String = "%02d   %s\n%s · %s" % [index + 1, entry["title"], entry["difficulty"], "已完成" if cleared else "可挑战" if index < unlocked else "待解锁"]
+		var rank: String = Catalog.grade(int(store.data["completed"][str(index)]["steps"]), str(entry["solution"]).length()) if cleared else ""
+		var title: String = "%02d   %s\n%s · %s" % [index + 1, entry["title"], entry["difficulty"], "最佳 " + rank if cleared else "可挑战" if index < unlocked else "待解锁"]
 		_button(ui, title, Rect2(76 + column * 381, 185 + row * 145, 350, 118), func() -> void: _select_level(index), index >= unlocked)
 	_button(ui, "← 返回主菜单", Rect2(76, 657, 280, 54), func() -> void: show_menu(false))
 

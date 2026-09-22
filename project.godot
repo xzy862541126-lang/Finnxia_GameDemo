@@ -11,9 +11,9 @@ config_version=5
 [application]
 
 config/name="苔庭搬运记"
-run/main_scene="res://campaign.tscn"
+run/main_scene="res://journey.tscn"
 config/use_custom_user_dir=true
-config/custom_user_dir_name="MossAndCrates"
+config/custom_user_dir_name="MossAndCrates_Test"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 

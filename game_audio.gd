@@ -54,6 +54,15 @@ func set_volume_db(value: float) -> void:
 	_sync_bus()
 	save_settings()
 
+func stop_all() -> void:
+	for voice: AudioStreamPlayer in _voices:
+		voice.stop()
+		voice.stream = null
+
+func _exit_tree() -> void:
+	stop_all()
+	_streams.clear()
+
 func play(name: StringName, throttle_seconds: float = 0.0) -> void:
 	if not enabled:
 		return
@@ -72,6 +81,12 @@ func play(name: StringName, throttle_seconds: float = 0.0) -> void:
 	voice.play()
 
 func _build_streams() -> void:
+	_streams[&"defeat"] = _synth([_tone(262, 0.12, 0.25, 0.0, 2), _tone(131, 0.24, 0.22, 0.1, 1)], 0.36, true)
+	_streams[&"crush"] = _noise(0.2, 0.55, 500.0, 1.8, false)
+	_streams[&"splash"] = _noise(0.44, 0.4, 1800.0, 1.4, true)
+	_streams[&"cat"] = _synth([_tone(740, 0.15, 0.13, 0.0, 1), _tone(554, 0.18, 0.12, 0.1, 1)], 0.3, true)
+	_streams[&"portal"] = _synth([_tone(330, 0.16, 0.19, 0.0, 1), _tone(660, 0.2, 0.17, 0.1, 1), _tone(990, 0.18, 0.15, 0.2, 1)], 0.4, true)
+	_streams[&"treasure"] = _synth([_tone(659, 0.18, 0.23, 0.0, 2), _tone(988, 0.2, 0.2, 0.14, 2), _tone(1318, 0.34, 0.18, 0.3, 2)], 0.66, true)
 	_streams[&"ui_hover"] = _synth([_tone(660, 0.05, 0.16, 0.0, 2)], 0.05, true)
 	_streams[&"ui_click"] = _synth([_tone(520, 0.07, 0.32, 0.0, 2), _tone(780, 0.09, 0.24, 0.03, 2)], 0.12, true)
 	_streams[&"ui_confirm"] = _synth([_tone(523, 0.10, 0.30, 0.0, 2), _tone(659, 0.12, 0.26, 0.06, 2), _tone(784, 0.16, 0.24, 0.13, 2)], 0.3, true)

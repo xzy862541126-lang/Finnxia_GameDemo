@@ -118,6 +118,7 @@ func _run() -> void:
 	expect(not FileAccess.file_exists(test_path), "Isolated test save path")
 	game = CAMPAIGN.instantiate() as CampaignController
 	game.save_path = test_path
+	game.tutorials_enabled = false
 	root.add_child(game)
 	current_scene = game
 	await process_frame

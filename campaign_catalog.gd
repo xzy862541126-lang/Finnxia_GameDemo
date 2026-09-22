@@ -6,6 +6,27 @@ const CRATE_SCENE: PackedScene = preload("res://crate.tscn")
 const GOAL_SCENE: PackedScene = preload("res://goal.tscn")
 const ORIGINAL_SOLUTION: String = "LDDLLURRURDDUUURRRDDURRDDLLLRUUULLLDDRD"
 
+static func grade(steps: int, reference: int) -> String:
+	if reference <= 0 or steps < 0:
+		return "—"
+	if steps <= reference:
+		return "S"
+	if steps * 4 <= reference * 5:
+		return "A"
+	if steps * 5 <= reference * 8:
+		return "B"
+	return "C"
+
+static func aggregate(records: Dictionary, definitions: Array[Dictionary]) -> Dictionary:
+	var steps: int = 0
+	var reference: int = 0
+	for index: int in range(definitions.size()):
+		if not records.has(str(index)):
+			return {"grade": "—", "steps": steps, "reference": reference}
+		steps += int(records[str(index)]["steps"])
+		reference += str(definitions[index]["solution"]).length()
+	return {"grade": grade(steps, reference), "steps": steps, "reference": reference}
+
 static func entries() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	var file: FileAccess = FileAccess.open("res://campaign_levels.json", FileAccess.READ)

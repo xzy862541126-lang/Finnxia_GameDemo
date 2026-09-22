@@ -123,7 +123,7 @@ func test_rules() -> void:
 
 func find_button(parent: Node, text: String) -> Button:
 	for child: Node in parent.get_children():
-		if child is Button and (child as Button).text.contains(text):
+		if child is Button and ((child as Button).text.contains(text) or (child as Button).tooltip_text.contains(text)):
 			return child as Button
 		var found: Button = find_button(child, text)
 		if found != null:
@@ -199,6 +199,7 @@ func _run() -> void:
 		solutions.append(route)
 	isolated_path = "user://garden_mechanism_test_%d.json" % Time.get_ticks_usec()
 	game = APP.instantiate() as Campaign
+	game.tutorials_enabled = false
 	game.save_path = isolated_path
 	root.add_child(game)
 	current_scene = game
